@@ -3,13 +3,13 @@ package controllers
 import javax.inject._
 
 import play.api.mvc._
-import services.CompareService
+import services.{CompareService, DifferenceService}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
 
 @Singleton
-class HomeController @Inject()(compareService: CompareService) extends Controller {
+class HomeController @Inject()(compareService: CompareService, differenceService: DifferenceService) extends Controller {
 
   def compare() = Action.async { request =>
     val searchRequest = createSearchRequest(request)
@@ -17,6 +17,16 @@ class HomeController @Inject()(compareService: CompareService) extends Controlle
     compareService.compare(searchRequest).map {
       response =>
         Ok(views.html.index(response))
+    }
+  }
+
+  def difference() = Action.async { request =>
+    val searchRequest = createSearchRequest(request)
+
+    differenceService.diff(searchRequest).map {
+      response =>
+        val stringResponse = "Extra In QA: " + response._1 + "\nExtra in DEV: " + response._2
+        Ok(stringResponse)
     }
   }
 

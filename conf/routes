@@ -1,4 +1,5 @@
 # Routes
 
-GET     /compare                     controllers.HomeController.compare
+GET     /compare                  controllers.HomeController.compare
+GET     /difference               controllers.HomeController.difference
 
